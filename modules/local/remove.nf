@@ -18,9 +18,8 @@ process REMOVE {
     def prefix = task.ext.prefix ?: "${meta.id}"
     input = meta.single_end ? "in=${fastq}" : "-1 ${fastq[0]} -2  ${fastq[1]}"
     """
-    bowtie2 -p 8 -x /cpfs01/projects-HDD/cfff-47998b01bebd_HDD/rj_24212030018/db/bowtiedb/hg38.fa ${input} -S ${prefix}.sam --un-conc ${prefix}.fq --very-sensitive
+    bowtie2 -p 8 -x /cpfs01/projects-HDD/cfff-47998b01bebd_HDD/rj_24212030018/db/bowtiedb/hg38.fa ${input} -S ${prefix}.sam --un-conc ${prefix}.fq ${args}
     pigz -p 8 *.fq
     rm ${prefix}.sam
     """
 }
-
