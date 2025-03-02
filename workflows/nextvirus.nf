@@ -30,11 +30,10 @@ workflow NEXTVIRUS {
     //
     // SUBWORKFLOW: BUILD CONTIGS LIB
     //
-    ch_cclib = BUILD_CONTIG_LIB(ch_clean_reads).out.ch_cclib
-
+    BUILD_CONTIG_LIB(ch_clean_reads)
     //
     // SUBWORKFLOW: BUILD VIRUS LIB
     //
-    ch_virlib = BUILD_VIRUS_LIB(ch_cclib).out.ch_virlib
+    ch_virlib = BUILD_VIRUS_LIB(BUILD_CONTIG_LIB.out.ch_cclib).out.ch_virlib
     
 }

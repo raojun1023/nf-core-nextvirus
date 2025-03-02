@@ -1,4 +1,4 @@
-include { NEXTVIRUS } from 'workflows/nextvirus'
+include { NEXTVIRUS } from './workflows/nextvirus'
 workflow {
         NEXTVIRUS()
 }
