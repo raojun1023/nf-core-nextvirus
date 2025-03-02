@@ -1,0 +1,3 @@
+sample,fastq_1,fastq_2
+15R,../virus_pipline/data/15R1423_1.fastq.gz,../virus_pipline/data/15R1423_2.fastq.gz
+AME,../virus_pipline/data/AME098_1.fastq.gz,../virus_pipline/data/AME098_2.fastq.gz
