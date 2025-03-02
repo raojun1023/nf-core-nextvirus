@@ -6,5 +6,5 @@ export HOME="/cpfs01/projects-HDD/cfff-47998b01bebd_HDD/rj_24212030018/workflow/
 export PATH="$PATH:/cpfs01/projects-HDD/cfff-47998b01bebd_HDD/rj_24212030018/workflow/nf-core-nextvirus/bin"
 export PATH="$PATH:/cpfs01/projects-HDD/cfff-47998b01bebd_HDD/rj_24212030018/software/DeepVirFinder"
 cd /cpfs01/projects-HDD/cfff-47998b01bebd_HDD/rj_24212030018/workflow/nf-core-nextvirus
-export  NXF_HOME='$PWD'
+export  NXF_HOME=/cpfs01/projects-HDD/cfff-47998b01bebd_HDD/rj_24212030018/workflow/nf-core-nextvirus
 /cpfs01/projects-HDD/cfff-47998b01bebd_HDD/rj_24212030018/software/nextflow run main.nf  --input samplesheet.csv -c nextflow.config -w /cpfs01/projects-HDD/cfff-47998b01bebd_HDD/rj_24212030018/workflow/nf-core-nextvirus/wkdir -with-conda -resume -offline
