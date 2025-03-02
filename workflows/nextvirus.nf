@@ -2,6 +2,7 @@
 include { INPUT_CHECK } from '../subworkflows/local/input_check'
 include { FILTER_READS } from '../subworkflows/local/filter_reads'
 include { BUILD_CONTIG_LIB } from '../subworkflows/local/build_contiglib'
+include { BUILD_VIRUS_LIB } from '../subworkflows/local/build_viruslib'
 workflow NEXTVIRUS {
     // Check mandatory parameters
     if (params.input) {
@@ -30,5 +31,10 @@ workflow NEXTVIRUS {
     // SUBWORKFLOW: BUILD CONTIGS LIB
     //
     ch_cclib = BUILD_CONTIG_LIB(ch_clean_reads).out.ch_cclib
+
+    //
+    // SUBWORKFLOW: BUILD VIRUS LIB
+    //
+    ch_virlib = BUILD_VIRUS_LIB(ch_cclib).out.ch_virlib
     
 }
