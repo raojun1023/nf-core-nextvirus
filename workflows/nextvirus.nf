@@ -3,7 +3,10 @@ include { INPUT_CHECK } from '../subworkflows/local/input_check'
 include { FILTER_READS } from '../subworkflows/local/filter_reads'
 include { BUILD_CONTIG_LIB } from '../subworkflows/local/build_contiglib'
 include { BUILD_VIRUS_LIB } from '../subworkflows/local/build_viruslib'
-include { BRACKEN_DB; BRACKEN; BRACKEN_COMBINEBRACKENOUTPUTS } from '../modules/local/bracken'
+include { BRACKEN_DB ; BRACKEN ; BRACKEN_COMBINEBRACKENOUTPUTS } from '../modules/local/bracken'
+include { CDHIT } from '../modules/local/cdhit'
+
+
 workflow NEXTVIRUS {
     // Check mandatory parameters
     if (params.input) {
@@ -35,7 +38,8 @@ workflow NEXTVIRUS {
     //
     // SUBWORKFLOW: BUILD VIRUS LIB
     //
-    ch_virlib = BUILD_VIRUS_LIB(BUILD_CONTIG_LIB.out.ch_cclib).out.ch_virlib
+    BUILD_VIRUS_LIB(BUILD_CONTIG_LIB.out.ch_cclib)
+    CDHIT(BUILD_VIRUS_LIB.out.ch_vs2contigs, "spades" )
 
     // Using kraken2 and bracken
     if (params.use_kraken2) {

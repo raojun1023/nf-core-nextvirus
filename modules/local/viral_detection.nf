@@ -81,29 +81,23 @@ process VIRSORTER2 {
 
 process DVF {
     label "viroprofiler_binning"
-    conda '/cpfs01/projects-HDD/cfff-47998b01bebd_HDD/rj_24212030018/miniconda3/envs/dvf'
+    conda '/cpfs01/projects-HDD/cfff-47998b01bebd_HDD/rj_24212030018/miniconda3/envs/fastqc'
 
     input:
     path(contigs)
 
     output:
-    path("*")
     path("dvf_virus.tsv"), emit: dvf2vContigs_ch
     path("virus_dvf.list"), emit: dvflist_ch
     path("*_dvfpred.txt"), emit: dvfscore_ch
     path("dvf.fasta"), emit: dvfseq_ch
-
-    when:
-    task.ext.when == null || task.ext.when
-
+    script:
     """
-    export OMP_NUM_THREADS=$task.cpus
-    
-    dvf.py -i $contigs -o . -c $task.cpus
+    /cpfs01/projects-HDD/cfff-47998b01bebd_HDD/rj_24212030018/miniconda3/envs/viroprofiler-dvf/bin/python /cpfs01/projects-HDD/cfff-47998b01bebd_HDD/rj_24212030018/miniconda3/envs/viroprofiler-dvf/bin/dvf.py -i $contigs -o . -c $task.cpus
     dvf_output=\$(ls *_dvfpred.txt)
-    calc_qvalue.r \${dvf_output} $params.dvf_qvalue dvf_virus.tsv
+    /cpfs01/projects-HDD/cfff-47998b01bebd_HDD/rj_24212030018/miniconda3/envs/viroprofiler-dvf/bin/Rscript calc_qvalue.r \${dvf_output} $params.dvf_qvalue dvf_virus.tsv 
     sed 1d dvf_virus.tsv | cut -f1 > virus_dvf.list
-    seqkit grep -f virus_dvf.list $contigs > dvf.fasta 
+    seqkit grep -f virus_dvf.list contigs.fasta > dvf.fasta
     """
 }
 

@@ -10,10 +10,10 @@ workflow BUILD_CONTIG_LIB {
             ch_clean_reads.map { meta, fastq -> [meta, fastq, [], []] },
             [],
         )
-            assemblies = params.assemblies == "contigs" ? SPADES.out.contigs : SPADES.out.scaffolds
-            CONTIGLIB(
-                assemblies.map { meta, fasta -> [fasta] }.collect()
-            )
+        assemblies = params.assemblies == "contigs" ? SPADES.out.contigs : SPADES.out.scaffolds
+        CONTIGLIB(
+            assemblies.map { meta, fasta -> [fasta] }.collect()
+        )
         ch_cclib = CONTIGLIB.out.cclib_long_ch
 
     emit:
