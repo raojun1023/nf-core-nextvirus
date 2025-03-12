@@ -1,4 +1,4 @@
-process CHERRY {
+process PHABOX {
         label "viroprofiler_taxa"
         conda '/cpfs01/projects-HDD/cfff-47998b01bebd_HDD/rj_24212030018/miniconda3/envs/phabox2'
 
