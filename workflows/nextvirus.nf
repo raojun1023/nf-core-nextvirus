@@ -4,11 +4,14 @@ include { FILTER_READS } from '../subworkflows/local/filter_reads'
 include { BUILD_CONTIG_LIB } from '../subworkflows/local/build_contiglib'
 include { BUILD_VIRUS_LIB } from '../subworkflows/local/build_viruslib'
 include { ABUNDANCE_ESTIMATION } from '../subworkflows/local/abundance_estimation'
+include { PHABOX } from '../subworkflows/local/phabox'
 
-include { BRACKEN_DB ; BRACKEN ; BRACKEN_COMBINEBRACKENOUTPUTS } from '../modules/local/bracken'
+
+include { BRACKEN ; BRACKEN_COMBINEBRACKENOUTPUTS } from '../modules/local/bracken'
 include { CDHIT } from '../modules/local/cdhit'
-include { TAXONOMY_VCONTACT ; TAXONOMY_MMSEQS ; TAXONOMY_MERGE } from '../modules/local/taxonomy'
-include { VIRALHOST_IPHOP } from '../modules/local/viral_host'
+include { TAXONOMY_VCONTACT ; PHAGEGCN } from '../modules/local/taxonomy'
+include { VIRALHOST_IPHOP ; CHERRY } from '../modules/local/viral_host'
+include { BACPHLIP } from '../modules/local/replicyc'
 
 
 workflow NEXTVIRUS {
@@ -48,12 +51,23 @@ workflow NEXTVIRUS {
     // 
     // Taxonomy
     TAXONOMY_VCONTACT(CDHIT.out.nrviruslib)
+    PHAGEGCN(CDHIT.out.nrviruslib)
 
     // Host detection
     VIRALHOST_IPHOP(CDHIT.out.nrviruslib)
+    CHERRY(CDHIT.out.nrviruslib)
 
     // Viral abundance estimation
     ABUNDANCE_ESTIMATION(ch_clean_reads, CDHIT.out.nrviruslib)
+
+    // Replication cycle
+    if (params.replicyc == "bacphlip") {
+        BACPHLIP(CDHIT.out.nrviruslib)
+    }
+
+    //Phabox
+
+    PHABOX(CDHIT.out.nrviruslib)
 
     // Using kraken2 and bracken
     if (params.use_kraken2) {
