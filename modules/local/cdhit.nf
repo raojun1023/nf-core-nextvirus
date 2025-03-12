@@ -1,26 +1,25 @@
 process CDHIT {
-    label "viroprofiler_base"
-    conda '/cpfs01/projects-HDD/cfff-47998b01bebd_HDD/rj_24212030018/miniconda3/envs/cd-hit'
-
+        label "viroprofiler_base"
+        conda '/cpfs01/projects-HDD/cfff-47998b01bebd_HDD/rj_24212030018/miniconda3/envs/cd-hit'
 
     input:
-    file(contigslib)
-    val(assembler)
+        file contigslib
+        val assembler
 
     output:
-    path("${assembler}_vOTUs_consensus.fasta"), emit: nrviruslib  // 正确语法
-    path("${assembler}_min_comp.tsv"), emit: nrvirustsv           // 正确语法
+        path ("${assembler}_vOTUs_consensus.fasta"), emit: nrviruslib
+    // 正确语法        path ("${assembler}_min_comp.tsv"), emit: nrvirustsv
 
     script:
-    """
+        """
     # append all the mined viral scaffolds
     cat ${contigslib} > concat_${assembler}.fasta
     # set viral scaffolds reads header to be unique
     seqkit rename concat_${assembler}.fasta > concat_unique_${assembler}.fasta
     # CD-HIT-EST
     cd-hit-est \
-    -T 80 \
-    -M 80G \
+    -T 32 \
+    -M 80000 \
     -i concat_unique_${assembler}.fasta \
     -o derep95_${assembler}.fasta \
     -c 0.95 \

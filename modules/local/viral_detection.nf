@@ -65,7 +65,10 @@ process VIRSORTER2 {
 
     """
     #virsorter config --set HMMSEARCH_THREADS=$task.cpus
-    virsorter run --seqname-suffix-off --viral-gene-enrich-off --prep-for-dramv -i $contigs -w out_vs2 --include-groups $params.virsorter2_groups --min-length $params.contig_minlen --min-score 0.5 -j $task.cpus --provirus-off -d ${params.db}/virsorter2 all
+    virsorter run --keep-original-seq -i $contigs -w vs2-pass1 --include-groups dsDNAphage,ssDNA --min-length $params.contig_minlen --min-score 0.5 -j $task.cpus -d ${params.db}/virsorter2 all
+    checkv end_to_end vs2-pass1/final-viral-combined.fa checkv -t $task.cpus -d ${params.db}/checkvdb/checkv-db-v1.0
+    cat checkv/proviruses.fna checkv/viruses.fna > checkv/combined.fna
+    virsorter run --seqname-suffix-off --viral-gene-enrich-off --prep-for-dramv -i checkv/combined.fna -w out_vs2 --include-groups $params.virsorter2_groups --min-length $params.contig_minlen --min-score 0.5 -j $task.cpus --provirus-off -d ${params.db}/virsorter2 all
     grep '^>' out_vs2/final-viral-combined.fa | sed 's/>//' | sed 's/||.*//' > virus_virsorter2.list
     ln -s out_vs2/for-dramv/final-viral-combined-for-dramv.fa .
     ln -s out_vs2/for-dramv/viral-affi-contigs-for-dramv.tab .
